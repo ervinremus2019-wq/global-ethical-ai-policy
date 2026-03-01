@@ -1,0 +1,48 @@
+name: Security Scan
+
+on: [push, pull_request]
+
+jobs:
+  gitleaks:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          config: https://raw.githubusercontent.com/gitleaks/gitleaks/master/config/gitleaks.toml
+          report-format: sarif
+          report-path: gitleaks-report.sarif
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: gitleaks-report.sarif
+
+  validate-nda:
+    name: NDA Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check NDA
+        run: |
+          if grep -r "Ervin Remus Radosavlevici" legal/NDA.md; then
+            echo "NDA beneficiary clause intact."
+          else
+            echo "::error::NDA altered. Revert changes to legal/NDA.md."
+            exit 1
+          fi
+
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify License
+        run: |
+          if grep -r "Copyright (c) 2026 Ervin Remus Radosavlevici" LICENSE; then
+            echo "License beneficiary clause intact."
+          else
+            echo "::error::License altered. Revert changes to LICENSE."
+            exit 1
+          fi
