@@ -1,0 +1,27 @@
+# Global Ethical AI Policy Framework .gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+/docs/*.pdf
+/docs/*.html
+
+# Environment files
+.env
+
+# IDE files
+.idea/
+.vscode/
+
+# Security
+*.pem
+*.key
+
+# Dependencies
+/node_modules/
+
+# Python
+__pycache__/
+*.pyc
