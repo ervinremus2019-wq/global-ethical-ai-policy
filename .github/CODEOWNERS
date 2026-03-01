@@ -1,0 +1,9 @@
+# Code Owners for Global Ethical AI Policy Framework
+# Only Ervin Remus Radosavlevici can approve changes to core files.
+* @ErvinRadosavlevici
+
+# Explicit paths for critical files
+LICENSE @ErvinRadosavlevici
+legal/NDA.md @ErvinRadosavlevici
+README.md @ErvinRadosavlevici
+.github/CODEOWNERS @ErvinRadosavlevici
