@@ -1,0 +1,32 @@
+name: License Compliance
+
+on: [push, pull_request]
+
+jobs:
+  check-license:
+    name: Enforce License
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Files
+        run: |
+          # Ensure all source files include the beneficiary notice
+          for file in $(find . -type f -name "*.md" -o -name "*.txt"); do
+            if ! grep -q "Ervin Remus Radosavlevici" "$file" && [[ "$file" != "LICENSE" ]]; then
+              echo "::warning::Missing beneficiary notice in $file"
+            fi
+          done
+
+  check-contributors:
+    name: Validate Contributors
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify CODEOWNERS
+        run: |
+          if grep -q "@ErvinRadosavlevici" .github/CODEOWNERS; then
+            echo "CODEOWNERS file is correct."
+          else
+            echo "::error::CODEOWNERS altered. Only Ervin Remus Radosavlevici can be owner."
+            exit 1
+          fi
